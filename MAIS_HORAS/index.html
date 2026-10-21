@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Mais Horas - Controle de Extensão e Extracurricular</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Link de Atalho para Teclado (Navegação Rápida) -->
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+  <!-- Avisos Dinâmicos para Leitores de Tela -->
+  <div id="aria-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <header role="banner">
+    <h1>+ Horas</h1>
+    <nav aria-label="Navegação Principal">
+      <ul>
+        <li><a href="#dashboard" id="nav-dashboard">Painel</a></li>
+        <li><a href="#atividades" id="nav-atividades">Atividades</a></li>
+        <li><a href="#cadastro" id="nav-cadastro">Configurar Curso</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content" tabIndex="-1">
+    
+    <!-- MÓDULO 1: CADASTRO E CONFIGURAÇÃO -->
+    <section id="view-cadastro" class="view-section card">
+      <h2>Configuração da Grade Curricular</h2>
+      <form id="form-cadastro">
+        <div class="form-group">
+          <label for="curso-nome">Nome do Curso:</label>
+          <input type="text" id="curso-nome" required aria-required="true" placeholder="Ex: Ciência da Computação">
+        </div>
+
+        <div class="form-group">
+          <label for="qtd-periodos">Quantidade de Períodos/Blocos:</label>
+          <input type="number" id="qtd-periodos" min="1" max="16" required aria-required="true" placeholder="Ex: 8">
+        </div>
+
+        <div class="form-group">
+          <label for="meta-extensao">Meta de Horas de Extensão por Bloco:</label>
+          <input type="number" id="meta-extensao" min="0" required aria-required="true" placeholder="Ex: 20">
+        </div>
+
+        <div class="form-group">
+          <label for="meta-extracurricular">Meta de Horas Extracurriculares por Bloco:</label>
+          <input type="number" id="meta-extracurricular" min="0" required aria-required="true" placeholder="Ex: 15">
+        </div>
+
+        <button type="submit" class="btn-primary">Salvar e Iniciar Controle</button>
+      </form>
+    </section>
+
+    <!-- MÓDULO 1: PAINEL / DASHBOARD DE PROGRESSO -->
+    <section id="view-dashboard" class="view-section card">
+      <h2>Progresso Geral do Curso</h2>
+      <p id="info-curso" class="font-bold mb-2"></p>
+      
+      <!-- CARDS QUADRADOS DE RESUMO GERAL -->
+      <div class="metrics-grid mb-4">
+        <div class="metric-card square-card ext-card" role="region" aria-label="Total de Horas de Extensão">
+          <span class="card-tag">Extensão</span>
+          <p class="card-hours" id="total-extensao-hrs">0h / 0h</p>
+          <p class="card-pct" id="total-extensao-pct">0% Concluído</p>
+        </div>
+
+        <div class="metric-card square-card extra-card" role="region" aria-label="Total de Horas Extracurriculares">
+          <span class="card-tag">Extracurricular</span>
+          <p class="card-hours" id="total-extra-hrs">0h / 0h</p>
+          <p class="card-pct" id="total-extra-pct">0% Concluído</p>
+        </div>
+      </div>
+
+      <p id="label-progresso-total" class="font-bold">Progresso Total Geral do Curso:</p>
+      <div class="progress-container">
+        <div id="bar-progresso-total" class="progress-bar" role="progressbar" aria-labelledby="label-progresso-total" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <p id="percentual-texto" class="percentual-destaque"></p>
+      
+      <hr class="divider">
+
+      <h3>Resumo Detalhado por Período / Bloco</h3>
+      <div id="resumo-blocos"></div>
+    </section>
+
+    <!-- MÓDULO 2 E 3: REGISTRO DE ATIVIDADES E COMPROVANTES -->
+    <section id="view-atividades" class="view-section card">
+      <h2 id="titulo-form-atividade">Registrar Atividade ou Projeto</h2>
+      
+      <form id="form-atividade">
+        <input type="hidden" id="atividade-id-edit">
+
+        <div class="form-group">
+          <label for="tipo-atividade">Tipo de Atividade:</label>
+          <select id="tipo-atividade" required>
+            <option value="extensao">Projeto de Extensão</option>
+            <option value="extracurricular">Atividade Extracurricular</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bloco-atividade">Período/Bloco Correspondente:</label>
+          <select id="bloco-atividade" required></select>
+        </div>
+
+        <div class="form-group">
+          <label for="nome-atividade">Nome do Projeto/Atividade:</label>
+          <input type="text" id="nome-atividade" required placeholder="Ex: Monitoria de Algoritmos">
+        </div>
+
+        <div class="form-group">
+          <label for="horas-atividade">Quantidade de Horas Acumuladas:</label>
+          <input type="number" id="horas-atividade" min="1" required placeholder="Ex: 10">
+        </div>
+
+        <div class="form-group">
+          <label for="comprovante-file">Upload de Certificado (Imagem ou PDF):</label>
+          <input type="file" id="comprovante-file" accept="image/*,.pdf">
+          <span id="arquivo-atual-info" class="text-sm text-muted"></span>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" id="btn-salvar-atividade" class="btn-primary">Cadastrar Atividade</button>
+          <button type="button" id="btn-cancelar-edicao" class="btn-secondary" style="display: none;">Cancelar Edição</button>
+        </div>
+      </form>
+
+      <hr class="divider-lg">
+
+      <h3>Histórico de Atividades Cadastradas</h3>
+      <table aria-label="Tabela de Atividades e Certificados Registrados">
+        <thead>
+          <tr>
+            <th scope="col">Bloco</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Horas</th>
+            <th scope="col">Comprovante</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-corpo"></tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
